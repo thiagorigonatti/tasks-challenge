@@ -1,0 +1,8 @@
+<div mat-dialog-content>
+  <p>{{data}}</p>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="onConfirm(false)">Cancel</button>
+  <button mat-raised-button color="primary" cdkFocusInitial (click)="onConfirm(true) ">Delete</button>
+</div>

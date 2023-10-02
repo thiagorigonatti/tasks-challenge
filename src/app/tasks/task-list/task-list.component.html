@@ -1,0 +1,81 @@
+<div class="taskContainer">
+  <mat-card>
+    <mat-toolbar class="header-row">
+      <h2>TASKS</h2>
+    </mat-toolbar>
+    <mat-table
+      matSort
+      matSortActive="position"
+      matSortDirection=asc
+      matSortDisableClear
+      (matSortChange)="sortTask($event)"
+      [dataSource]="taskArr" class="mat-elevation-z8"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)">
+
+      <ng-container matColumnDef="position">
+        <mat-header-cell mat-sort-header class="clPosition" *matHeaderCellDef>POS</mat-header-cell>
+        <mat-cell class="clPosition hand" cdkDrag *matCellDef="let task">
+          <mat-icon> drag_handle</mat-icon>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="rawCost">
+
+        <mat-header-cell class="clId" *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell class="clId" *matCellDef="let task">{{task.rawCost}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="_id">
+        <mat-header-cell class="clId" *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell class="clId" *matCellDef="let task">{{task._id}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell class="clName" *matHeaderCellDef>NAME</mat-header-cell>
+        <mat-cell class="clName" *matCellDef="let task">{{task.name}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="dateLimit">
+        <mat-header-cell class="clLimitDate" *matHeaderCellDef>LIMIT DATE</mat-header-cell>
+        <mat-cell class="clLimitDate" *matCellDef="let task">{{task.limitDate}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cost">
+        <mat-header-cell class="clCost" *matHeaderCellDef>COST</mat-header-cell>
+        <mat-cell class="clCost" *matCellDef="let task">{{task.cost}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef class="action-column-header clOperations">OPERATIONS</mat-header-cell>
+
+        <mat-cell *matCellDef="let task" class="action-column clOperations">
+          <button (click)="onEdit(task)" style="margin: 0 10px;" mat-mini-fab color="primary" aria-label="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button (click)="onDelete(task)" style="margin: 0 10px;" mat-mini-fab color="warn" aria-label="Remover">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+
+      </ng-container>
+
+      <mat-header-row class="row" *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row class="row" [ngClass]="[row.rawCost >= 1000 ? 'emphasis' : 'normal']"
+               *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </mat-card>
+
+
+  <mat-card>
+    <mat-toolbar class="footer-row">
+      <button class="btnAdd" (click)="onAdd()" mat-mini-fab color="accent" aria-label="Adicionar">
+        <mat-icon>add</mat-icon>
+      </button>
+
+    </mat-toolbar>
+  </mat-card>
+
+
+</div>

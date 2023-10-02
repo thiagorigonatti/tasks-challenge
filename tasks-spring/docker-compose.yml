@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+
+  task-test-spring:
+    image: task-test-spring
+    build: .
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - db # This service depends on mysql. Start that first.
+    environment: # Pass environment variables to the service
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/tasks?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+
+  # Database Service (Mysql)
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_DATABASE: tasks
+      MYSQL_PASSWORD:
