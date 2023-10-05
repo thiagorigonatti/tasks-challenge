@@ -1,6 +1,5 @@
 package me.thiagorigonatti.tasksspring.exception;
 
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,12 +13,12 @@ import java.util.Objects;
 @ControllerAdvice
 public class ValidatorExceptionHandler {
 
-
   @ExceptionHandler(value = MethodArgumentNotValidException.class)
-  public ResponseEntity<Object> handleApiException(MethodArgumentNotValidException e) {
+  public ResponseEntity<CustomException> handleApiException(MethodArgumentNotValidException e) {
 
     HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-    CustomException exception = new CustomException(Objects.requireNonNull(e.getFieldError("cost")).getDefaultMessage(), httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+    CustomException exception = new CustomException(Objects.requireNonNull(e.getFieldError("cost"))
+      .getDefaultMessage(), httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
     return new ResponseEntity<>(exception, httpStatus);
 
   }

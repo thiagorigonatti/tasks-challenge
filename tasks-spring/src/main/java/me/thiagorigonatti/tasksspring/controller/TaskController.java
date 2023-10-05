@@ -14,69 +14,56 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/api/tasks")
 public class TaskController {
 
-    private final TaskService taskService;
+  private final TaskService taskService;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
-
-    @CrossOrigin(origins = "http://localhost")
-    @GetMapping
-    public ResponseEntity<List<Task>> findAll(@RequestParam(name = "_order", defaultValue = "asc") String order) {
-
-        List<Task> all = taskService.findAll();
-
-        if (order.equalsIgnoreCase("asc"))
-            all.sort((o1, o2) -> {
-                if (o1.getPosition() < o2.getPosition()) return -1;
-                else if (o1.getPosition() > o2.getPosition()) return 1;
-                return 0;
-            });
-
-        else if (order.equalsIgnoreCase("desc")) all.sort((o1, o2) -> {
-            if (o1.getPosition() > o2.getPosition()) return -1;
-            else if (o1.getPosition() < o2.getPosition()) return 1;
-            return 0;
-        });
-
-        return new ResponseEntity<>(all, HttpStatus.OK);
-    }
-
-    @CrossOrigin(origins = "http://localhost")
-    @GetMapping("/{id}")
-    public ResponseEntity<Task> findById(@PathVariable Long id) {
-        return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
-    }
-
-    @CrossOrigin(origins = "http://localhost")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        taskService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @CrossOrigin(origins = "http://localhost")
-    @PutMapping("/{id}")
-    public ResponseEntity<Task> replace(@PathVariable Long id, @Valid @RequestBody TaskDtoPutBody taskDtoPutBody) {
-        return new ResponseEntity<>(taskService.replace(id, taskDtoPutBody), HttpStatus.OK);
-    }
+  public TaskController(TaskService taskService) {
+    this.taskService = taskService;
+  }
 
 
-    @CrossOrigin(origins = "http://localhost")
-    @PostMapping
-    public ResponseEntity<Task> save(@Valid @RequestBody TaskDtoPostBody taskDtoPostBody) {
-        return new ResponseEntity<>(taskService.save(taskDtoPostBody), HttpStatus.CREATED);
-    }
+  @CrossOrigin(origins = "http://localhost")
+  @GetMapping
+  public ResponseEntity<List<Task>> findAll(@RequestParam(name = "order", required = false) String order) {
+    if (order == null) return new ResponseEntity<>(taskService.findAll(), HttpStatus.OK);
+    else return new ResponseEntity<>(taskService.findByOrderByPosition(order), HttpStatus.OK);
+  }
 
 
-    @CrossOrigin(origins = "http://localhost")
-    @PatchMapping("/{id}")
-    public ResponseEntity<Task> updatePartially(@PathVariable Long id, @Valid @RequestBody TaskDtoPatchBody taskDtoPatchBody) throws IllegalAccessException {
-        return new ResponseEntity<>(taskService.updatePartially(id, taskDtoPatchBody), HttpStatus.CREATED);
-    }
+  @CrossOrigin(origins = "http://localhost")
+  @GetMapping("/{id}")
+  public ResponseEntity<Task> findById(@PathVariable Long id) {
+    return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
+  }
 
+
+  @CrossOrigin(origins = "http://localhost")
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    taskService.delete(id);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+
+  @CrossOrigin(origins = "http://localhost")
+  @PutMapping("/{id}")
+  public ResponseEntity<Task> replace(@PathVariable Long id, @Valid @RequestBody TaskDtoPutBody taskDtoPutBody) {
+    return new ResponseEntity<>(taskService.replace(id, taskDtoPutBody), HttpStatus.OK);
+  }
+
+
+  @CrossOrigin(origins = "http://localhost")
+  @PostMapping
+  public ResponseEntity<Task> save(@Valid @RequestBody TaskDtoPostBody taskDtoPostBody) {
+    return new ResponseEntity<>(taskService.save(taskDtoPostBody), HttpStatus.CREATED);
+  }
+
+
+  @CrossOrigin(origins = "http://localhost")
+  @PatchMapping("/{id}")
+  public ResponseEntity<Task> updatePartially(@PathVariable Long id, @Valid @RequestBody TaskDtoPatchBody taskDtoPatchBody) throws IllegalAccessException {
+    return new ResponseEntity<>(taskService.updatePartially(id, taskDtoPatchBody), HttpStatus.CREATED);
+  }
 }

@@ -9,11 +9,13 @@ import me.thiagorigonatti.tasksspring.map.TaskDtoPostMapper;
 import me.thiagorigonatti.tasksspring.map.TaskDtoPutMapper;
 import me.thiagorigonatti.tasksspring.map.TaskPatchMapper;
 import me.thiagorigonatti.tasksspring.repository.TaskRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,9 +34,17 @@ public class TaskService {
   }
 
 
+  public List<Task> findByOrderByPosition(String order) {
+    List<Task> byPosition = taskRepository.findByOrderByPosition();
+    if (order.equalsIgnoreCase(Sort.Direction.DESC.name())) Collections.reverse(byPosition);
+    return byPosition;
+  }
+
+
   public Task findById(Long id) {
     return taskRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
   }
+
 
   private Task replaceInternal(Task task, TaskDtoPutBody taskDtoPutBody) {
     Task newTask = TaskDtoPutMapper.INSTANCE.toTask(taskDtoPutBody);
@@ -43,27 +53,23 @@ public class TaskService {
     return taskRepository.save(newTask);
   }
 
+
   public Task replace(Long id, TaskDtoPutBody taskDtoPutBody) {
-
     Task task = findById(id);
-
     Task fromPutBody = taskRepository.findByName(taskDtoPutBody.getName());
-
     if (fromPutBody != null) {
       if (task.getName().equals(fromPutBody.getName())) return replaceInternal(task, taskDtoPutBody);
-      else throw new ApiException("A task named: " + taskDtoPutBody.getName().trim() + " already exists");
+      else throw new ApiException("A task named: `".concat(taskDtoPutBody.getName()).concat("` already exists"));
     } else return replaceInternal(task, taskDtoPutBody);
   }
 
 
   public Task save(TaskDtoPostBody taskDtoPostBody) {
-
     if (taskRepository.findByName(taskDtoPostBody.getName().trim()) != null)
-      throw new ApiException("A task named: " + taskDtoPostBody.getName().trim() + " already exists");
-
+      throw new ApiException("A task named: `".concat(taskDtoPostBody.getName()).concat("` already exists"));
     Task task = TaskDtoPostMapper.INSTANCE.toTask(taskDtoPostBody);
     long count = taskRepository.count() + 1;
-    task.setPosition((int) count);
+    task.setPosition(count);
     return taskRepository.save(task);
   }
 
@@ -79,6 +85,7 @@ public class TaskService {
     }
     return this.taskRepository.save(oldTask);
   }
+
 
   public void delete(Long id) {
     taskRepository.delete(findById(id));

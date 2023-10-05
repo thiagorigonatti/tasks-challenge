@@ -7,76 +7,92 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(name = "name", columnNames = {"name"})})
-public class Task implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("_id")
-    private Long id;
+public class Task {
 
 
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonProperty("_id")
+  private Long id;
 
-    private BigDecimal cost;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate limitDate;
+  @Column(name = "name", nullable = false, unique = true)
+  private String name;
 
-    private Integer position;
+  private BigDecimal cost;
 
-    public Long getId() {
-        return id;
-    }
+  @JsonFormat(pattern = "dd/MM/yyyy")
+  private LocalDate limitDate;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  private Long position;
 
-    public String getName() {
-        return name;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public BigDecimal getCost() {
-        return cost;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public LocalDate getLimitDate() {
-        return limitDate;
-    }
+  public BigDecimal getCost() {
+    return cost;
+  }
 
-    public void setLimitDate(LocalDate limitDate) {
-        this.limitDate = limitDate;
-    }
+  public void setCost(BigDecimal cost) {
+    this.cost = cost;
+  }
 
-    public Integer getPosition() {
-        return position;
-    }
+  public LocalDate getLimitDate() {
+    return limitDate;
+  }
 
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
+  public void setLimitDate(LocalDate limitDate) {
+    this.limitDate = limitDate;
+  }
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", cost=" + cost +
-                ", limitDate=" + limitDate +
-                ", position=" + position +
-                '}';
-    }
+  public Long getPosition() {
+    return position;
+  }
+
+  public void setPosition(Long position) {
+    this.position = position;
+  }
+
+  @Override
+  public String toString() {
+    return "Task{" +
+      "id=" + id +
+      ", name='" + name + '\'' +
+      ", cost=" + cost +
+      ", limitDate=" + limitDate +
+      ", position=" + position +
+      '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Task task)) return false;
+    return Objects.equals(getId(), task.getId()) && Objects.equals(getName(), task.getName())
+      && Objects.equals(getCost(), task.getCost()) && Objects.equals(getLimitDate(), task.getLimitDate())
+      && Objects.equals(getPosition(), task.getPosition());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId(), getName(), getCost(), getLimitDate(), getPosition());
+  }
 }
