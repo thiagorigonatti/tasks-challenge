@@ -1,8 +1,18 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tasks?createDatabaseIfNotExist=true
-    username: root
-    password:
+    url: jdbc:sqlite:database.db # If using sqlite
+
+#    url: jdbc:mysql://localhost:3306/tasks?createDatabaseIfNotExist=true # If using mysql
+#    username: root
+#    password:
+
+#    url: jdbc:h2:mem:task # If using h2
+#    username: sa
+#    password: password
+#    driverClassName: org.h2.Driver
+#  h2:
+#    console:
+#      enabled: false
 
   jpa:
     hibernate:

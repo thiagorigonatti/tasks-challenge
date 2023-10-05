@@ -24,7 +24,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @GetMapping
     public ResponseEntity<List<Task>> findAll(@RequestParam(name = "_order", defaultValue = "asc") String order) {
 
@@ -46,34 +46,34 @@ public class TaskController {
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @GetMapping("/{id}")
     public ResponseEntity<Task> findById(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         taskService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @PutMapping("/{id}")
     public ResponseEntity<Task> replace(@PathVariable Long id, @Valid @RequestBody TaskDtoPutBody taskDtoPutBody) {
         return new ResponseEntity<>(taskService.replace(id, taskDtoPutBody), HttpStatus.OK);
     }
 
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @PostMapping
     public ResponseEntity<Task> save(@Valid @RequestBody TaskDtoPostBody taskDtoPostBody) {
         return new ResponseEntity<>(taskService.save(taskDtoPostBody), HttpStatus.CREATED);
     }
 
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @PatchMapping("/{id}")
     public ResponseEntity<Task> updatePartially(@PathVariable Long id, @Valid @RequestBody TaskDtoPatchBody taskDtoPatchBody) throws IllegalAccessException {
         return new ResponseEntity<>(taskService.updatePartially(id, taskDtoPatchBody), HttpStatus.CREATED);

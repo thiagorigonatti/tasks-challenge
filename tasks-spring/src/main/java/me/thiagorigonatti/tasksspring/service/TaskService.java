@@ -19,62 +19,68 @@ import java.util.List;
 @Service
 public class TaskService {
 
-    private final TaskRepository taskRepository;
+  private final TaskRepository taskRepository;
 
 
-    public TaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+  public TaskService(TaskRepository taskRepository) {
+    this.taskRepository = taskRepository;
+  }
+
+
+  public List<Task> findAll() {
+    return taskRepository.findAll();
+  }
+
+
+  public Task findById(Long id) {
+    return taskRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+  }
+
+  private Task replaceInternal(Task task, TaskDtoPutBody taskDtoPutBody) {
+    Task newTask = TaskDtoPutMapper.INSTANCE.toTask(taskDtoPutBody);
+    newTask.setPosition(task.getPosition());
+    newTask.setId(task.getId());
+    return taskRepository.save(newTask);
+  }
+
+  public Task replace(Long id, TaskDtoPutBody taskDtoPutBody) {
+
+    Task task = findById(id);
+
+    Task fromPutBody = taskRepository.findByName(taskDtoPutBody.getName());
+
+    if (fromPutBody != null) {
+      if (task.getName().equals(fromPutBody.getName())) return replaceInternal(task, taskDtoPutBody);
+      else throw new ApiException("A task named: " + taskDtoPutBody.getName().trim() + " already exists");
+    } else return replaceInternal(task, taskDtoPutBody);
+  }
+
+
+  public Task save(TaskDtoPostBody taskDtoPostBody) {
+
+    if (taskRepository.findByName(taskDtoPostBody.getName().trim()) != null)
+      throw new ApiException("A task named: " + taskDtoPostBody.getName().trim() + " already exists");
+
+    Task task = TaskDtoPostMapper.INSTANCE.toTask(taskDtoPostBody);
+    long count = taskRepository.count() + 1;
+    task.setPosition((int) count);
+    return taskRepository.save(task);
+  }
+
+
+  public Task updatePartially(Long id, TaskDtoPatchBody taskDtoPatchBody) throws IllegalAccessException {
+    Task oldTask = findById(id);
+    Task newTask = TaskPatchMapper.INSTANCE.toTask(taskDtoPatchBody);
+    newTask.setId(oldTask.getId());
+    for (Field declaredField : oldTask.getClass().getDeclaredFields()) {
+      declaredField.setAccessible(true);
+      if (declaredField.get(newTask) != null && !declaredField.get(newTask).equals(declaredField.get(oldTask)))
+        declaredField.set(oldTask, declaredField.get(newTask));
     }
+    return this.taskRepository.save(oldTask);
+  }
 
-
-    public List<Task> findAll() {
-        return taskRepository.findAll();
-    }
-
-
-    public Task findById(Long id) {
-        return taskRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-
-    public Task replace(Long id, TaskDtoPutBody taskDtoPutBody) {
-
-
-        Task task = findById(id);
-        if (!task.getName().equals(taskRepository.findByName(taskDtoPutBody.getName().trim()).getName()))
-            throw new ApiException("A task named: " + taskDtoPutBody.getName().trim() + " already exists");
-
-        Task newTask = TaskDtoPutMapper.INSTANCE.toTask(taskDtoPutBody);
-        newTask.setPosition(task.getPosition());
-        newTask.setId(task.getId());
-        return taskRepository.save(newTask);
-    }
-
-
-    public Task save(TaskDtoPostBody taskDtoPostBody) {
-
-        if (taskRepository.findByName(taskDtoPostBody.getName().trim()) != null)
-            throw new ApiException("A task named: " + taskDtoPostBody.getName().trim() + " already exists");
-        Task task = TaskDtoPostMapper.INSTANCE.toTask(taskDtoPostBody);
-        long count = taskRepository.count() + 1;
-        task.setPosition((int) count);
-        return taskRepository.save(task);
-    }
-
-
-    public Task updatePartially(Long id, TaskDtoPatchBody taskDtoPatchBody) throws IllegalAccessException {
-        Task oldTask = findById(id);
-        Task newTask = TaskPatchMapper.INSTANCE.toTask(taskDtoPatchBody);
-        newTask.setId(oldTask.getId());
-        for (Field declaredField : oldTask.getClass().getDeclaredFields()) {
-            declaredField.setAccessible(true);
-            if (declaredField.get(newTask) != null && !declaredField.get(newTask).equals(declaredField.get(oldTask)))
-                declaredField.set(oldTask, declaredField.get(newTask));
-        }
-        return this.taskRepository.save(oldTask);
-    }
-
-    public void delete(Long id) {
-        taskRepository.delete(findById(id));
-    }
+  public void delete(Long id) {
+    taskRepository.delete(findById(id));
+  }
 }

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+
+  angular_service:
+    image: thiagorigonatti/ang:frontend
+    build: .
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - spring_service # This service depends on spring_service. Start that first
+    deploy:
+      resources:
+        limits:
+          cpus: '0.300'
+          memory: 300M
+
+  spring_service:
+    image: thiagorigonatti/ang:backend
+    build: ./tasks-spring/.
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlite:database.db
+
+    deploy:
+      resources:
+        limits:
+          cpus: '0.300'
+          memory: 300M
+
+#    depends_on: # If using mysql
+#      - mysql_service # This service depends on mysql_service. Start that first
+#    environment: # Pass environment variables to the service
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_service:3306/tasks?createDatabaseIfNotExist=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD:
+#
+#  mysql_service:
+#    image: mysql:8.0
+#    ports:
+#      - "3306:3306"
+#    restart: always
+#    environment:
+#      MYSQL_ALLOW_EMPTY_PASSWORD: true
+#      MYSQL_DATABASE: tasks
+#      MYSQL_PASSWORD:
+#
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.300'
+#          memory: 300M

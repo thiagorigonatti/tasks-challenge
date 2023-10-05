@@ -41,7 +41,7 @@ export class TaskFormComponent implements OnInit {
       _id: [task._id],
 
 
-      name: [task.name, [Validators.pattern('^[A-Za-z0-9](?!.*?\\s$)[A-Za-z0-9\\s]{0,9}$'), Validators.required, Validators.minLength(2), Validators.maxLength(128)]],
+      name: [task.name, [Validators.pattern('^[A-Za-z0-9]+(\\s+[A-Za-z0-9]+)*$'), Validators.required, Validators.minLength(2), Validators.maxLength(128)]],
 
 
       cost: [task.cost, [Validators.required,
@@ -97,7 +97,7 @@ export class TaskFormComponent implements OnInit {
         return "This field must have the following format dd/MM/yyyy and be a valid date";
 
       } else if (fieldName === 'name') {
-        return "Blank space not allowed at the beginning and at the end of the name field"
+        return "Blank space not allowed at the beginning and at the end of the name field, only chars numbers and space between are allowed"
 
       } else if (fieldName === 'cost') {
         return "Cost field must have the following format: 2.147.483.647,00 (two billion, one hundred and forty-seven million, four hundred and eighty-three thousand, six hundred and forty-seven)"
