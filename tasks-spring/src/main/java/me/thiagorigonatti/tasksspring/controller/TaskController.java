@@ -25,7 +25,7 @@ public class TaskController {
 
 
   @CrossOrigin(origins = "http://localhost")
-  @GetMapping
+  @GetMapping({"", "/"})
   public ResponseEntity<List<Task>> findAll(@RequestParam(name = "order", required = false) String order) {
     if (order == null) return new ResponseEntity<>(taskService.findAll(), HttpStatus.OK);
     else return new ResponseEntity<>(taskService.findByOrderByPosition(order), HttpStatus.OK);
@@ -33,14 +33,14 @@ public class TaskController {
 
 
   @CrossOrigin(origins = "http://localhost")
-  @GetMapping("/{id}")
+  @GetMapping({"/{id}" , "/{id}/"})
   public ResponseEntity<Task> findById(@PathVariable Long id) {
     return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
   }
 
 
   @CrossOrigin(origins = "http://localhost")
-  @DeleteMapping("/{id}")
+  @DeleteMapping({"/{id}" , "/{id}/"})
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     taskService.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -48,7 +48,7 @@ public class TaskController {
 
 
   @CrossOrigin(origins = "http://localhost")
-  @PutMapping("/{id}")
+  @PutMapping({"/{id}" , "/{id}/"})
   public ResponseEntity<Task> replace(@PathVariable Long id, @Valid @RequestBody TaskDtoPutBody taskDtoPutBody) {
     return new ResponseEntity<>(taskService.replace(id, taskDtoPutBody), HttpStatus.OK);
   }
@@ -62,8 +62,10 @@ public class TaskController {
 
 
   @CrossOrigin(origins = "http://localhost")
-  @PatchMapping("/{id}")
-  public ResponseEntity<Task> updatePartially(@PathVariable Long id, @Valid @RequestBody TaskDtoPatchBody taskDtoPatchBody) throws IllegalAccessException {
+  @PatchMapping({"/{id}" , "/{id}/"})
+  public ResponseEntity<Task> updatePartially(@PathVariable Long id, @Valid @RequestBody TaskDtoPatchBody
+    taskDtoPatchBody) throws IllegalAccessException {
+
     return new ResponseEntity<>(taskService.updatePartially(id, taskDtoPatchBody), HttpStatus.CREATED);
   }
 }

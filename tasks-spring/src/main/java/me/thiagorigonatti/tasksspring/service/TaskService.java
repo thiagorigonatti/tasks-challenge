@@ -54,13 +54,21 @@ public class TaskService {
   }
 
 
+  public boolean canReplace(Task target, Task replacement) {
+    if (target.getName().equals(replacement.getName())) return true;
+    else throw new ApiException("A task named: `".concat(replacement.getName()).concat("` already exists"));
+  }
+
   public Task replace(Long id, TaskDtoPutBody taskDtoPutBody) {
     Task task = findById(id);
     Task fromPutBody = taskRepository.findByName(taskDtoPutBody.getName());
+
     if (fromPutBody != null) {
-      if (task.getName().equals(fromPutBody.getName())) return replaceInternal(task, taskDtoPutBody);
-      else throw new ApiException("A task named: `".concat(taskDtoPutBody.getName()).concat("` already exists"));
-    } else return replaceInternal(task, taskDtoPutBody);
+      if (canReplace(task, fromPutBody)) {
+        return replaceInternal(task, taskDtoPutBody);
+      }
+    }
+    return replaceInternal(task, taskDtoPutBody);
   }
 
 
@@ -75,18 +83,22 @@ public class TaskService {
 
 
   public Task updatePartially(Long id, TaskDtoPatchBody taskDtoPatchBody) throws IllegalAccessException {
+    if (taskDtoPatchBody.getName() != null) {
+      if (!taskRepository.findByName(taskDtoPatchBody.getName()).getId().equals(id)) {
+        throw new ApiException("A task named: `".concat(taskDtoPatchBody.getName()).concat("` already exists"));
+      }
+    }
     Task oldTask = findById(id);
     Task newTask = TaskPatchMapper.INSTANCE.toTask(taskDtoPatchBody);
     newTask.setId(oldTask.getId());
     for (Field declaredField : oldTask.getClass().getDeclaredFields()) {
       declaredField.setAccessible(true);
-      if (declaredField.get(newTask) != null && !declaredField.get(newTask).equals(declaredField.get(oldTask)))
+      if (declaredField.get(newTask) != null && !declaredField.get(newTask).equals(declaredField.get(oldTask))) {
         declaredField.set(oldTask, declaredField.get(newTask));
+      }
     }
     return this.taskRepository.save(oldTask);
   }
-
-
   public void delete(Long id) {
     taskRepository.delete(findById(id));
   }

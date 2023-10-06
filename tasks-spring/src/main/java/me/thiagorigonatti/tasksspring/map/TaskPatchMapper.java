@@ -7,7 +7,6 @@ public enum TaskPatchMapper {
 
     INSTANCE;
 
-
     public Task toTask(TaskDtoPatchBody taskDtoPatchBody) {
 
         if (taskDtoPatchBody == null) return null;
