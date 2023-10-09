@@ -1,11 +1,11 @@
 <div class="taskContainer">
 
-<mat-card>
-    <mat-toolbar class="header-row">
+<mat-card class="header-row">
+    <mat-toolbar >
       <h2>TASKS</h2>
     </mat-toolbar>
 
-    <form [formGroup]="form">
+    <form  [formGroup]="form">
       <mat-form-field class="full-width">
         <input matInput placeholder="NAME" formControlName="name">
         <mat-error *ngIf="form.get('name')?.invalid">{{getErrorMessage('name')}}</mat-error>
@@ -23,7 +23,7 @@
 
     </form>
 
-  <mat-card-actions align="end">
+  <mat-card-actions  align="end">
     <button (click)="onCancel()" style="margin: 8px 8px 8px 0;" color="accent" mat-raised-button>CANCEL</button>
     <button (click)="onSubmit()" style="margin: 8px 8px 8px 0;" color="primary" mat-raised-button>SAVE</button>
   </mat-card-actions>

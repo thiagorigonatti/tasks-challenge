@@ -10,13 +10,13 @@ import {Sort} from "@angular/material/sort";
 })
 export class TasksService {
 
-  private readonly API = "http://localhost:8080/api/tasks" //backend endpoint here;
+  private readonly API = "https://localhost:1443/api/tasks" //backend endpoint here;
 
   constructor(private httpClient: HttpClient) {
   }
 
   findAll(sort: Sort): Observable<Task[]> {
-    const params = new HttpParams().set("_sort", sort.active).set("_order", sort.direction);
+    const params = new HttpParams().set("sort", sort.active).set("order", sort.direction);
     return this.httpClient.get<Task[]>(this.API, {params});
   }
 

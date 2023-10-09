@@ -6,7 +6,7 @@ services:
     image: thiagorigonatti/ang:frontend
     build: .
     ports:
-      - "80:80"
+      - "443:443"
     restart: always
     depends_on:
       - spring_service # This service depends on spring_service. Start that first
@@ -20,10 +20,10 @@ services:
     image: thiagorigonatti/ang:backend
     build: ./tasks-spring/.
     ports:
-      - "8080:8080"
+      - "1443:1443"
     restart: always
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlite:database.db
+      SPRING_DATASOURCE_URL: jdbc:sqlite:/home/tasks.db
 
     deploy:
       resources:

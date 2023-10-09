@@ -24,7 +24,7 @@ public class TaskController {
   }
 
 
-  @CrossOrigin(origins = "http://localhost")
+  @CrossOrigin(origins = "https://localhost")
   @GetMapping({"", "/"})
   public ResponseEntity<List<Task>> findAll(@RequestParam(name = "order", required = false) String order) {
     if (order == null) return new ResponseEntity<>(taskService.findAll(), HttpStatus.OK);
@@ -32,14 +32,14 @@ public class TaskController {
   }
 
 
-  @CrossOrigin(origins = "http://localhost")
+  @CrossOrigin(origins = "https://localhost")
   @GetMapping({"/{id}" , "/{id}/"})
   public ResponseEntity<Task> findById(@PathVariable Long id) {
     return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
   }
 
 
-  @CrossOrigin(origins = "http://localhost")
+  @CrossOrigin(origins = "https://localhost")
   @DeleteMapping({"/{id}" , "/{id}/"})
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     taskService.delete(id);
@@ -47,21 +47,21 @@ public class TaskController {
   }
 
 
-  @CrossOrigin(origins = "http://localhost")
+  @CrossOrigin(origins = "https://localhost")
   @PutMapping({"/{id}" , "/{id}/"})
   public ResponseEntity<Task> replace(@PathVariable Long id, @Valid @RequestBody TaskDtoPutBody taskDtoPutBody) {
     return new ResponseEntity<>(taskService.replace(id, taskDtoPutBody), HttpStatus.OK);
   }
 
 
-  @CrossOrigin(origins = "http://localhost")
+  @CrossOrigin(origins = "https://localhost")
   @PostMapping
   public ResponseEntity<Task> save(@Valid @RequestBody TaskDtoPostBody taskDtoPostBody) {
     return new ResponseEntity<>(taskService.save(taskDtoPostBody), HttpStatus.CREATED);
   }
 
 
-  @CrossOrigin(origins = "http://localhost")
+  @CrossOrigin(origins = "https://localhost")
   @PatchMapping({"/{id}" , "/{id}/"})
   public ResponseEntity<Task> updatePartially(@PathVariable Long id, @Valid @RequestBody TaskDtoPatchBody
     taskDtoPatchBody) throws IllegalAccessException {

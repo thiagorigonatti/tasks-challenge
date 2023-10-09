@@ -14,21 +14,21 @@
       (cdkDropListDropped)="drop($event)">
 
       <ng-container matColumnDef="position">
-        <mat-header-cell mat-sort-header class="clPosition" *matHeaderCellDef>POS</mat-header-cell>
-        <mat-cell class="clPosition hand" cdkDrag *matCellDef="let task">
+        <mat-header-cell mat-sort-header class="column120px" *matHeaderCellDef>POS</mat-header-cell>
+        <mat-cell class="column120px hand" cdkDrag *matCellDef="let task">
           <mat-icon> drag_handle</mat-icon>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="rawCost">
 
-        <mat-header-cell class="clId" *matHeaderCellDef>ID</mat-header-cell>
-        <mat-cell class="clId" *matCellDef="let task">{{task.rawCost}}</mat-cell>
+        <mat-header-cell class="column120px" *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell class="column120px" *matCellDef="let task">{{task.rawCost}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="_id">
-        <mat-header-cell class="clId" *matHeaderCellDef>ID</mat-header-cell>
-        <mat-cell class="clId" *matCellDef="let task">{{task._id}}</mat-cell>
+        <mat-header-cell class="column120px" *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell class="column120px" *matCellDef="let task">{{task._id}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="name">
@@ -37,19 +37,19 @@
       </ng-container>
 
       <ng-container matColumnDef="dateLimit">
-        <mat-header-cell class="clLimitDate" *matHeaderCellDef>LIMIT DATE</mat-header-cell>
-        <mat-cell class="clLimitDate" *matCellDef="let task">{{task.limitDate}}</mat-cell>
+        <mat-header-cell class="column120px" *matHeaderCellDef>LIMIT DATE</mat-header-cell>
+        <mat-cell class="column120px" *matCellDef="let task">{{task.limitDate}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="cost">
-        <mat-header-cell class="clCost" *matHeaderCellDef>COST</mat-header-cell>
-        <mat-cell class="clCost" *matCellDef="let task">{{task.cost}}</mat-cell>
+        <mat-header-cell class="column120px" *matHeaderCellDef>COST</mat-header-cell>
+        <mat-cell class="column120px" *matCellDef="let task">{{task.cost}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="action">
-        <mat-header-cell *matHeaderCellDef class="action-column-header clOperations">OPERATIONS</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="action-column-header column120px">OPERATIONS</mat-header-cell>
+        <mat-cell *matCellDef="let task" class="action-column column120px">
 
-        <mat-cell *matCellDef="let task" class="action-column clOperations">
           <button (click)="onEdit(task)" style="margin: 0 10px;" mat-mini-fab color="primary" aria-label="Editar">
             <mat-icon>edit</mat-icon>
           </button>
@@ -57,6 +57,7 @@
           <button (click)="onDelete(task)" style="margin: 0 10px;" mat-mini-fab color="warn" aria-label="Remover">
             <mat-icon>delete</mat-icon>
           </button>
+
         </mat-cell>
 
       </ng-container>

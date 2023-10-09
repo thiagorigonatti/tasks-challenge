@@ -35,4 +35,4 @@ COPY --from=jdk17 ${DEPENDENCY}/BOOT-INF/classes /app
 
 ENTRYPOINT ["java","-cp","app:app/lib/*","me.thiagorigonatti.tasksspring.TasksSpringApplication"]
 
-EXPOSE 8080
+EXPOSE 1443

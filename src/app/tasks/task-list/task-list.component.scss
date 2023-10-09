@@ -1,5 +1,6 @@
 .taskContainer {
   padding: 20px;
+  min-width: 800px;
 }
 
 .header-row {
@@ -20,14 +21,6 @@
   border-collapse: collapse;
 }
 
-.clPosition {
-  max-width: 80px
-}
-
-.clId {
-  max-width: 50px;
-}
-
 mat-header-cell, mat-cell {
   justify-content: center;
 }
@@ -46,3 +39,13 @@ mat-header-row, mat-row {
   background-color: rgb(192, 192, 0);
   color: black;
 }
+
+.column120px{
+  max-width: 120px;
+  white-space: nowrap;
+}
+
+.clName{
+  text-align: center;
+}
+
