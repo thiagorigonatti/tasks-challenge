@@ -10,7 +10,7 @@ import {Sort} from "@angular/material/sort";
 })
 export class TasksService {
 
-  private readonly API = "https://localhost:1443/api/tasks" //backend endpoint here;
+  private readonly API = "http://localhost:8080/api/tasks" //backend endpoint here;
 
   constructor(private httpClient: HttpClient) {
   }
